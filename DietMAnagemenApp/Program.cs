@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using System.Text.Json.Serialization;
 
 namespace DietMAnagemenApp
@@ -13,7 +14,10 @@ namespace DietMAnagemenApp
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-            }).AddNToastNotifyToastr();
+            }).AddNToastNotifyToastr().AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<Program>();
+            });
             builder.Services.AddHttpClient("DietApi", client =>
             {
                 client.BaseAddress = new Uri("https://localhost:7251/api/");

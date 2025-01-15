@@ -1,20 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DietMAnagemenApp.Models;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NToastNotify;
 using System.Net.Http;
 
-namespace DietMAnagemenApp.Models
+namespace DietMAnagemenApp.Controllers
 {
     public class MealController : Controller
     {
         private readonly IHttpClientFactory _clientFactory;
-        private readonly IToastNotification _toastNotification;             
+        private readonly IToastNotification _toastNotification;
         private static string ActionResultErrorMessage;
         private static string ActionResultSuccessMessage;
-        public MealController(IHttpClientFactory clientFactory, IToastNotification toastNotification)
+        private readonly IValidator<Meal> _mealValidator;
+        public MealController(IHttpClientFactory clientFactory, IToastNotification toastNotification, IValidator<Meal> mealValidator)
         {
             _clientFactory = clientFactory;
             _toastNotification = toastNotification;
+            _mealValidator = mealValidator;
         }
 
         public async Task<IActionResult> Index()
@@ -46,7 +50,7 @@ namespace DietMAnagemenApp.Models
 
             var meal = await client.GetFromJsonAsync<Meal>($"Meal/{id}");
             var dietPlan = await client.GetFromJsonAsync<DietPlan>($"DietPlan/{meal.DietPlanId}");
-            if (dietPlan==null)
+            if (dietPlan == null)
             {
                 return NotFound();
             }
@@ -93,7 +97,7 @@ namespace DietMAnagemenApp.Models
             // Retrieve diet plans from API to populate dropdown
             var client = _clientFactory.CreateClient("DietApi");
             var dietPlans = await client.GetFromJsonAsync<List<DietPlan>>("DietPlan");
-            if (dietPlans!=null)
+            if (dietPlans != null)
             {
                 ViewBag.DietPlanId = new SelectList(dietPlans, "Id", "Title");
             }
@@ -109,11 +113,20 @@ namespace DietMAnagemenApp.Models
         [HttpPost]
         public async Task<IActionResult> Add(Meal meal)
         {
+            var validationResult = await _mealValidator.ValidateAsync(meal);
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+                return View(meal);
+            }
             var client = _clientFactory.CreateClient("DietApi");
             try
             {
                 var response = await client.PostAsJsonAsync("Meal", meal);
-                response.EnsureSuccessStatusCode(); 
+                response.EnsureSuccessStatusCode();
                 return RedirectToAction("Index", "Home"); // Redirect to home or another page upon successful addition
             }
             catch (HttpRequestException)
