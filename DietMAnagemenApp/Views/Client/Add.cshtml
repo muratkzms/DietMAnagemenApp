@@ -1,0 +1,186 @@
+﻿@model Client
+
+@{
+    ViewData["Title"] = "Yeni Danışan Ekle";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Yeni Danışan Ekle</h2>
+    <form asp-action="Add" method="post">
+        <!-- Client Basic Info -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Fullname" class="form-label">Ad Soyad</label>
+                    <input asp-for="Fullname" class="form-control" />
+                    <span asp-validation-for="Fullname" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Picture" class="form-label">Profil Fotoğraf URL</label>
+                    <input asp-for="Picture" class="form-control" />
+                    <span asp-validation-for="Picture" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="About" class="form-label">Hakkında</label>
+                    <textarea asp-for="About" class="form-control"></textarea>
+                    <span asp-validation-for="About" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Weight" class="form-label">Ağırlık (kg)</label>
+                    <input asp-for="Weight" type="number" class="form-control" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Height" class="form-label">Boy (cm)</label>
+                    <input asp-for="Height" type="number" class="form-control" />
+                    <span asp-validation-for="Height" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="DateOfBirth" class="form-label">Doğum Tarihi</label>
+                    <input asp-for="DateOfBirth" type="date" class="form-control" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Diet Plans -->
+        <div class="diet-plans-section">
+            <h4 class="mb-3">Diyet Planı</h4>
+            <div id="dietPlansContainer">
+                <div class="diet-plan-template">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Diyet Plan Başlığı</label>
+                                <input name="DietPlans[0].Title" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Açıklama</label>
+                                <input name="DietPlans[0].Description" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Başlangıç Tarihi</label>
+                                <input name="DietPlans[0].StartAt" type="date" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Bitiş Tarihi</label>
+                                <input name="DietPlans[0].EndAt" type="date" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Başlangıç Ağırlığı</label>
+                                <input name="DietPlans[0].StartingWeight" type="number" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meals -->
+                    <div class="meals-section">
+                        <h5 class="mt-3">Meals</h5>
+                        <div id="mealsContainer-0">
+                            <div class="meal-template">
+                                <div class="row align-items-center">
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Öğün Adı</label>
+                                            <input name="DietPlans[0].Meals[0].Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Öğün İçeriği</label>
+                                            <textarea name="DietPlans[0].Meals[0].Content" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Öğün Saati</label>
+                                            <input name="DietPlans[0].Meals[0].MealTime" type="time" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-danger btn-sm remove-meal mt-4">Kaldır</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm add-meal" data-plan-index="0">Öğün Bloğu Ekle</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm mt-3 add-diet-plan">Diyet Plan Bloğu Ekle</button>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        let dietPlanIndex = 0;
+
+        // Yeni bir diyet planı eklemek için
+        document.querySelector('.add-diet-plan').addEventListener('click', () => {
+            const dietPlansContainer = document.querySelector('#dietPlansContainer');
+            const newDietPlan = document.querySelector('.diet-plan-template').cloneNode(true);
+
+            dietPlanIndex++;
+            newDietPlan.querySelectorAll('input, textarea').forEach(input => {
+                input.name = input.name.replace('[0]', `[${dietPlanIndex}]`);
+            });
+
+            const mealsContainer = newDietPlan.querySelector('#mealsContainer-0');
+            mealsContainer.id = `mealsContainer-${dietPlanIndex}`;
+
+            const addMealButton = newDietPlan.querySelector('.add-meal');
+            addMealButton.setAttribute('data-plan-index', dietPlanIndex);
+
+            dietPlansContainer.appendChild(newDietPlan);
+        });
+
+        // Meals alanında işlemler
+        document.querySelector('#dietPlansContainer').addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-meal')) {
+                const planIndex = e.target.getAttribute('data-plan-index');
+                const mealsContainer = document.querySelector(`#mealsContainer-${planIndex}`);
+
+                const newMeal = document.querySelector('.meal-template').cloneNode(true);
+                const mealIndex = mealsContainer.children.length;
+
+                newMeal.querySelectorAll('input, textarea').forEach(input => {
+                    input.name = input.name.replace('[0].Meals[0]', `[${planIndex}].Meals[${mealIndex}]`);
+                });
+
+                mealsContainer.appendChild(newMeal);
+            }
+
+            if (e.target.classList.contains('remove-meal')) {
+                e.target.closest('.meal-template').remove();
+            }
+        });
+    </script>
+}

@@ -1,0 +1,80 @@
+﻿@model DietMAnagemenApp.Models.DietPlan
+@{
+    ViewData["Title"] = "Diyet Plan Detayı";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row page-titles">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">DietApp</a></li>
+        <li class="breadcrumb-item active"><a asp-controller="DietPlan" asp-action="Index">Diyet Planları</a></li>
+        <li class="breadcrumb-item active"><a asp-controller="DietPlan" asp-action="Detail" asp-route-id="@Model.Id">@ViewData["Title"]</a></li>
+    </ol>
+</div>
+
+<div class="col-xl-12">
+    <div class="card">
+        <div class="card-body pb-3">
+            <div class="row align-items-center">
+                <div class="col-xl-4 mb-3">
+                    <p class="mb-2">Diyet Plan Başlığı</p>
+                    <h2 class="mb-0">@Model.Title</h2>
+                </div>
+                <div class="col-xl-8 d-flex flex-wrap justify-content-between align-items-center">
+                    <div class="d-flex me-3 mb-3 ms-2 align-items-start">
+                        <i class="fa fa-coffee scale-2 me-4 mt-2"></i>
+                        <div>
+                            <p class="mb-2">Diet Başlangıç</p>
+                            <h4 class="mb-0">@Model.StartAt.ToString("dd MMM, yyyy")</h4>
+                        </div>
+                    </div>
+                    <div class="d-flex me-3 mb-3 ms-2 align-items-start">
+                        <i class="fa fa-male scale-2 me-4 mt-2"></i>
+                        <div>
+                            <p class="mb-2">Başlangıç Ağırlığı</p>
+                            <h4 class="mb-0">@Model.StartingWeight</h4>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <form asp-controller="Meal" asp-action="Delete" asp-route-Id="@Model.Id" method="get">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            @* <a class="btn btn-danger light me-3" asp-controller="DietPlan" asp-action="Delete" asp-route-Id="@Model.Id"><i class="las la-trash me-3 scale5"></i>Sil</a> *@
+                            <a asp-controller="Client" asp-action="Update" asp-route-Id="@Model.ClientId" class="btn btn-warning"><i class="las la-edit scale5 me-3"></i>Düzenle</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body pb-3 transaction-details d-flex flex-wrap justify-content-between align-items-center">
+            <div class="user-bx-2 me-3 mb-3">
+                <img src="@(ViewBag.Client!=null ? ViewBag.Client.Picture: "~/images/avatar/8.jpg")" class="rounded" alt="">
+                <div>
+                    <h3>@(ViewBag.Client != null ? ViewBag.Client.Fullname:"Veri yok")</h3>
+                    <span>@Model.Title Diyet Planı</span>
+                </div>
+            </div>
+            <div class="me-3 mb-3">
+                <p class="mb-2">Öğün Sayısı</p>
+                <h4 class="mb-0">@Model.Meals.Count</h4>
+            </div>
+            <div class="me-3 mb-3">
+                <p class="mb-2">Güncelleme Tar.</p>
+                <h4 class="mb-0">@Model.ModifiedDate</h4>
+            </div>
+            <div class="me-3 mb-3">
+                <p class="mb-2">Tanımlayan</p>
+                <h4 class="mb-0">@Model.CreatedByName</h4>
+            </div>
+            <div class="me-3 mb-3">
+                <p class="mb-2">Tanımlanma Tar.</p>
+                <h4 class="mb-0">@Model.CreatedDate.Value.ToString("dd MMM, yyyy")</h4>
+            </div>
+            <div class="amount-bx mb-3">
+                <i class="fa fa-cutlery"></i>
+                <div>
+                    <p class="mb-1">Diyet Plan Açıklaması</p>
+                    <h6 class="mb-0">@Model.Description</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

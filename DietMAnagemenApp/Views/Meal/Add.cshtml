@@ -1,0 +1,81 @@
+﻿@model Meal
+
+@{
+    ViewData["Title"] = "Yeni Öğün Ekle";
+    Layout = "_Layout";
+}
+<h2 class="text-center mb-4">Öğün Ekle</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <!-- Card Başlangıcı -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Öğün Ekle</h4>
+                <i class="fas fa-plus-circle"></i> <!-- Ekle ikonu -->
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Sol Sütun -->
+                    <div class="col-md-6">
+                        <!-- Öğün Adı -->
+                        <div class="form-group">
+                            <label asp-for="Name" class="form-label">Öğün Adı</label>
+                            <input asp-for="Name" class="form-control" placeholder="Öğün adını girin" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <!-- İçerik -->
+                        <div class="form-group">
+                            <label asp-for="Content" class="form-label">İçerik</label>
+                            <textarea asp-for="Content" class="form-control" placeholder="İçeriği girin"></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Sağ Sütun -->
+                    <div class="col-md-6">
+                        <!-- Öğün Saati -->
+                        <div class="form-group">
+                            <label asp-for="MealTime" class="form-label">Öğün Saati</label>
+                            <input asp-for="MealTime" type="time" class="form-control" />
+                            <span asp-validation-for="MealTime" class="text-danger"></span>
+                        </div>
+
+                        <!-- Diyet Planı -->
+                        <div class="form-group">
+                            <label class="form-label">Diyet Planı</label>
+                            <select asp-for="DietPlanId" asp-items="ViewBag.DietPlanId" class="form-control">
+                                <option value="">Diyet Planı Seçiniz</option>
+                            </select>
+                            <span asp-validation-for="DietPlanId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gönder Butonu -->
+                <div class="form-group text-center mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check-circle"></i> Ekle
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Card Sonu -->
+    </div>
+}
+
+<!-- Validation Scripts -->
+@* @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@
+
+<!-- FontAwesome CDN (ikonlar için) -->
+@* @section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+} *@

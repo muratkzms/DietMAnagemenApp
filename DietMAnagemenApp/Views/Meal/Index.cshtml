@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DietMAnagemenApp.Models.Meal>
+@{
+    ViewData["Title"] = "Diet Öğünleri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row page-titles">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">DietApp</a></li>
+        <li class="breadcrumb-item active"><a asp-controller="Meal" asp-action="Index">@ViewData["Title"]</a></li>
+    </ol>
+</div>
+
+<div class="row">
+    <div class="card-body">
+        <a type="button" class="btn btn-primary" asp-controller="Meal" asp-action="Add">
+            Yeni Öğün Ekle <span class="btn-icon-end"><i class="fa fa-user-plus"></i></span>
+        </a>
+    </div>
+    @foreach (var meal in Model.ToList())
+    {
+        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+            <div class="widget-stat card bg-danger">
+
+                <a asp-controller="Meal" asp-action="Detail" asp-route-id="@meal.Id">
+                    <div class="card-body  p-4">
+                        <div class="media">
+                            <span class="me-3">
+                                <i class="flaticon-381-calendar-1"></i>
+                            </span>
+                            <div class="media-body text-white text-end">
+                                <p class="mb-1">@meal.Name</p>
+                                <h3 class="text-white">@meal.MealTime</h3>
+                            </div>
+
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    }
+</div>

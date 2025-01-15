@@ -1,0 +1,66 @@
+﻿@model IEnumerable<DietMAnagemenApp.Models.Client>
+
+@{
+    ViewData["Title"] = "Danışanlar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row page-titles">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">DietApp</a></li>
+        <li class="breadcrumb-item active"><a asp-controller="Client" asp-action="Index">@ViewData["Title"]</a></li>
+    </ol>
+</div>
+<!-- row -->
+<div class="row">
+    <div class="card-body">
+        <a type="button" class="btn btn-primary" asp-controller="Client" asp-action="Add">
+            Danışan Ekle <span class="btn-icon-end"><i class="fa fa-user-plus"></i></span>
+        </a>        
+    </div>
+    @foreach (var client in Model.ToList())
+    {
+        @* var age =new DateTime(DateTime.Now.Date.Subtract(client.DateOfBirth).Ticks)-1; *@
+        int age1 = (client.DateOfBirth != null && client.DateOfBirth > DateTime.Now.AddYears(-150)) ? (int)((DateTime.Now - client.DateOfBirth).TotalDays / 365.255) : 0;
+        <div class="col-xl-4 col-lg-6 col-sm-6">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="text-center">
+                        <div class="profile-photo">
+                            <img src="@client.Picture" width="100" class="img-fluid rounded-circle" alt="">
+                        </div>
+                        <h3 class="mt-4 mb-1">@client.Fullname</h3>
+                        <p class="text-muted">@(client.About.Length > 70 ? client.About.Substring(0, 70) : client.About)</p>
+                        <a class="btn btn-outline-primary btn-rounded mt-3 px-5" asp-controller="Client" asp-action="Detail" asp-route-id="@client.Id">Detay</a>
+                    </div>
+                </div>
+
+                <div class="card-footer pt-0 pb-0 text-center">
+                    <div class="row">
+                        @*                         <div class="col-4 pt-3 pb-3 border-end">
+                            <h3 class="mb-1">@client.DateOfBirth.ToString("dd MMM, yyyy")</h3><span>Doğum Tarihi</span>
+                        </div> *@
+                        <div class="col-4 pt-3 pb-3 border-end">
+                            <h3 class="mb-1">@age1</h3><span>Yaş</span>
+                        </div>
+                        <div class="col-4 pt-3 pb-3 border-end">
+                            <h3 class="mb-1">@client.Height</h3><span>Boy</span>
+                        </div>
+                        <div class="col-4 pt-3 pb-3">
+                            <h3 class="mb-1">@client.Weight</h3><span>Ağırlık</span>
+                        </div>
+                        @*                         <div class="col-4 pt-3 pb-3 border-end">
+                            <h3 class="mb-1">@client.CreatedDate.Value.ToString("dd MMM, yy")</h3><span>Kayıt Tarihi</span>
+                        </div>
+                        <div class="col-4 pt-3 pb-3 border-end">
+                            <h3 class="mb-1">@client.DietPlans[0].Title</h3><span>Diyet Tipi</span>
+                        </div>
+                        <div class="col-4 pt-3 pb-3">
+                            <h3 class="mb-1"> @(client.IsActive==true ? "Aktif" : "Pasif")</h3><span>Durum</span>
+                        </div> *@
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

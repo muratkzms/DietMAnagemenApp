@@ -1,0 +1,191 @@
+﻿@model DietMAnagemenApp.Models.Client
+@{
+    ViewData["Title"] = "Danışan Detayı";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int age1 = (Model.DateOfBirth != null && Model.DateOfBirth > DateTime.Now.AddYears(-150)) ? (int)((DateTime.Now - Model.DateOfBirth).TotalDays / 365.255) : 0;
+}
+<div class="row page-titles">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">DietApp</a></li>
+        <li class="breadcrumb-item active"><a asp-controller="Client" asp-action="Index">Danışanlar (İstemciler)</a></li>
+        <li class="breadcrumb-item active"><a asp-controller="Client" asp-action="Detail" asp-route-id="@Model.Id">@ViewData["Title"]</a></li>
+    </ol>
+</div>
+
+<div class="col-xl-12">
+    <div class="card">
+        <div class="card-body pb-3">
+            <div class="row align-items-center">
+                <div class="col-xl-4 mb-3">
+                    <p class="mb-2">Uyguladığı Diyet</p>
+                    <h2 class="mb-0">@(Model.DietPlans.Count > 0 ? Model.DietPlans[0].Title : "Henüz Tanımlanmadı")</h2>
+                </div>
+                <div class="col-xl-8 d-flex flex-wrap justify-content-between align-items-center">
+                    <div class="d-flex me-3 mb-3 ms-2 align-items-start">
+                        <i class="fa fa-coffee scale-2 me-4 mt-2"></i>
+                        <div>
+                            <p class="mb-2">Diet Başlangıç</p>
+                            <h4 class="mb-0">@(Model.DietPlans.Count > 0 ? Model.DietPlans[0].StartAt.ToString("dd MMM, yyyy") : "Veri yok")</h4>
+                        </div>
+                    </div>
+                    <div class="d-flex me-3 mb-3 ms-2 align-items-start">
+                        <i class="fa fa-male scale-2 me-4 mt-2"></i>
+                        <div>
+                            <p class="mb-2">Başlangıç Ağırlığı</p>
+                            <h4 class="mb-0">@(Model.DietPlans.Count > 0 ? Model.DietPlans[0].StartingWeight : "Henüz Tanımlanmadı")</h4>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <form asp-controller="Meal" asp-action="Delete" asp-route-Id="@Model.Id" method="get">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <a class="btn btn-danger light me-3" asp-controller="Client" asp-action="Delete" asp-route-Id="@Model.Id"><i class="las la-trash me-3 scale5"></i>Sil</a>
+                            <a asp-controller="Client" asp-action="Update" asp-route-Id="@Model.Id" class="btn btn-warning"><i class="las la-edit scale5 me-3"></i>Düzenle</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body pb-3 transaction-details d-flex flex-wrap justify-content-between align-items-center">
+            <div class="user-bx-2 me-3 mb-3">
+                <img src="@Model.Picture" class="rounded" alt="">
+                <div>
+                    <h3>@Model.Fullname</h3>
+                    <span>@(Model.IsActive == true ? "Aktif" : "Aktif değil")</span>
+                </div>
+            </div>
+            <div class="me-3 mb-3">
+                <p class="mb-2">Ağırlık</p>
+                <h4 class="mb-0">@Model.Weight</h4>
+            </div>
+            <div class="me-3 mb-3">
+                <p class="mb-2">Boy</p>
+                <h4 class="mb-0">@Model.Height</h4>
+            </div>
+            <div class="me-3 mb-3">
+                <p class="mb-2">Doğum Tarihi</p>
+                <h4 class="mb-0">@Model.DateOfBirth.ToString("dd MMM, yyyy")</h4>
+            </div>
+            <div class="me-3 mb-3">
+                <p class="mb-2">Tanımlanma Tar.</p>
+                <h4 class="mb-0">@Model.CreatedDate.Value.ToString("dd MMM, yyyy")</h4>
+            </div>
+            <div class="amount-bx mb-3">
+                <i class="fa fa-cutlery"></i>
+                <div>
+                    <p class="mb-1">Danışan (İstemci Hakkında)</p>
+                    <h6 class="mb-0">@Model.About</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (Model.DietPlans.Count > 0)
+{
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><a asp-controller="Client" asp-action="Detail" asp-route-id="@Model.Id">Danışanın Uyguladığı Diyet(ler)</a></li>
+        </ol>
+    </div>
+
+    <div class="row">
+        @foreach (var dietplan in Model.DietPlans.ToList())
+        {
+            <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+                <div class="widget-stat card bg-info">
+                    <a asp-controller="DietPlan" asp-action="Detail" asp-route-id="@dietplan.Id">
+                        <div class="card-body p-4">
+                            <div class="media">
+                                <span class="me-3">
+                                    <i class="flaticon-381-heart"></i>
+                                </span>
+                                <div class="media-body text-white text-end">
+                                    <p class="mb-1">@dietplan.Title</p>
+                                    <h3 class="text-white">@dietplan.Meals.Count <span><p class="text-end"> Öğün</p></span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+
+}
+else
+{
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><a>Danışanın için tanımlanan uyguladığı diyet verisi yok.</a></li>
+        </ol>
+        <div class="row align-items-center">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary m-2">Submit</button>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.DietPlans.Count > 0)
+{
+    var meals = Model.DietPlans.Select(d => d.Meals).FirstOrDefault();
+    if (meals.Count > 0)
+    {
+        <div class="row page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"><a asp-controller="Client" asp-action="Detail" asp-route-id="@Model.Id">Danışanın Uyguladığı Diyet Öğünleri</a></li>
+            </ol>
+        </div>
+        <div class="row">
+            @foreach (var meal in meals)
+            {
+                <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+                    <div class="widget-stat card bg-danger">
+
+                        @* <a asp-controller="Meal" asp-action="Detail" asp-route-id="@meal.Id"> *@
+                        <div class="card-body  p-4">
+                            <div class="media">
+                                <span class="me-3">
+                                    <i class="flaticon-381-calendar-1"></i>
+                                </span>
+                                <div class="media-body text-white text-end">
+                                    <p class="mb-1">@meal.Name</p>
+                                    <h3 class="text-white">@meal.MealTime</h3>
+                                    <span>
+                                        <a class="btn light btn-danger btn-sm m-1" asp-controller="Meal" asp-action="Detail" asp-route-id="@meal.Id">
+                                            <i class="fa fa-newspaper-o"></i>
+                                        </a>
+                                        <a class="btn light btn-danger btn-sm m-1" asp-controller="Client" asp-action="Update" asp-route-id="@Model.Id">
+                                            <i class="fa fa-pencil-square"></i>
+                                        </a>
+                                        <a class="btn light btn-danger btn-sm m-1" asp-controller="Meal" asp-action="Delete" asp-route-id="@meal.Id">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                        @* </a> *@
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    }
+    else
+    {
+        <div class="row page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"><a>Danışanın için tanımlanan uyguladığı diyet öğünleri verisi yok.</a></li>
+            </ol>
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary m-2">Submit</button>
+                </div>
+            </div>
+        </div>
+    }
+}

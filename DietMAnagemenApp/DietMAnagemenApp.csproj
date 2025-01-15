@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\vendor\jquery-smartwizard\.github\FUNDING.yml" />
+    <None Include="wwwroot\vendor\jquery-smartwizard\.github\ISSUE_TEMPLATE\bug_report.md" />
+    <None Include="wwwroot\vendor\jquery-smartwizard\.github\ISSUE_TEMPLATE\feature_request.md" />
+    <None Include="wwwroot\vendor\jquery-smartwizard\.github\pull_request_template.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="NToastNotify" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>
