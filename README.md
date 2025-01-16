@@ -3,7 +3,7 @@ DietManagementApp
 Bu proje, SHFT_Assignment_Backend_v3 API projesinden beslenen bir MVC tabanlı ön yüz uygulamasıdır. Proje, diyetisyenler ve yöneticiler için kullanıcı dostu bir arayüz sunarak danışanların (Client), diyet planlarının (DietPlan) ve öğünlerin (Meal) yönetimini sağlamaktadır.
 
 Özellikler
-Katmanlı Mimari: Uygulama, açık bir şekilde ayrılmış iş katmanları ile sürdürülebilir bir yapı sunmaktadır.
+
 Hiyerarşik Yönetim:
 Danışanlar (Client)
 Diyet Planları (DietPlan)
